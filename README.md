@@ -1,8 +1,11 @@
-# Auditorium — _by Ahmed El-Sayed_
+# Auditorium - _by Ahmed El-Sayed_
+
 ## Project Overview
-Auditorium is a service that allows multiple players to enjoy TTRPG's online through an immersive chat interface. Users can interact with NPC's and eachother, facilitated by a hosting 'GameMaster' in control of their NPC's on the other end of the chat.
+
+Auditorium is a service that allows multiple players to enjoy TTRPGs online through an immersive chat interface. Users can interact with NPCs and each other, facilitated by a hosting GameMaster in control of their NPCs on the other end of the chat.
 
 ## Features
+
 - v0.1: **IN-DEVELOPMENT**
   - Websocket Manager
   - Session Manager
@@ -21,14 +24,19 @@ Auditorium is a service that allows multiple players to enjoy TTRPG's online thr
   - Character sheet modular integration
 
 ## Architecture
-_Note information below is a placeholder and subject to change during development_
+
+_Note information below is a placeholder and subject to change during development._
+
 ### React Client
+
 - UI Components
 - State Store
 - Socket Client
 
---(WebSocket + REST)-->
+`WebSocket + REST`
+
 ### Node Backend
+
 - API Layer
 - Socket Gateway
 - Session Manager
@@ -36,29 +44,78 @@ _Note information below is a placeholder and subject to change during developmen
 - Event Dispatcher
 - Persistence Layer
 
---->
 ### PostgreSQL DB
 
 ## Tech Stack
+
 ### Frontend
+
 - React
-- Typescript
+- TypeScript
 - Shadcn
 - Vite
-- Zustan
+- Zustand
 
 ### Backend
+
 - Node.js
 - Express
 - Socket.IO
 
 ### Database
+
 - PostgreSQL
 - Prisma
 
-### Devops
+### DevOps
+
 - Docker
-- Github Actions
+- GitHub Actions
+
+## Repository Structure
+
+```text
+apps/
+  api/      Express and Socket.IO backend
+  web/      React, TypeScript, Vite, Shadcn-ready frontend
+packages/
+  db/       Prisma schema and shared Prisma client
+```
 
 ## Setup Instructions
-_TODO_
+
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+- Docker Desktop
+
+### Install
+
+```bash
+npm install
+```
+
+### Environment
+
+```bash
+cp .env.example .env
+```
+
+### Database
+
+```bash
+docker compose up -d
+npm run db:generate
+npm run db:migrate
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+- Web: http://localhost:5173
+- API: http://localhost:4000
+- API health check: http://localhost:4000/health
