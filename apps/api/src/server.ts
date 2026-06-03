@@ -25,7 +25,11 @@ app.get('/health', async (_request, response) => {
 });
 
 io.on('connection', (socket) => {
-  socket.emit('session:connected', { socketId: socket.id });
+  socket.emit(`Client ${socket.id}: connected`, { socketId: socket.id });
+});
+
+io.on('disconnect', (socket) => {
+  socket.emit(`Client ${socket.id}: disconnected`, { socketId: socket.id });
 });
 
 httpServer.listen(port, () => {
