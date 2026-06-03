@@ -5,7 +5,7 @@ import { authenticate } from '../middleware/auth.js';
 const router = Router();
 
 // User Registration
-router.post('/register', authenticate, authController.register);
+router.post('/register', authController.register);
 
 // User Login
 router.post('/login', async (request, response) => {

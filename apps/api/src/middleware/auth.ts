@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { prisma } from '@auditorium/db';
-const bcrypt = require('bcrypt');
+import { hashSync } from 'bcrypt-ts';
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
@@ -10,7 +10,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
   }
 
   const token = authHeader.substring(7); // Remove 'Bearer ' prefix
-  const hashedToken = bcrypt.hashSync(token, 10);
+  const hashedToken = hashSync(token, 10);
 
   try {
     const user = await prisma.user.findUnique({ where: { id: hashedToken } });
