@@ -51,3 +51,5 @@ router.post('/rooms/:roomId/characters', async (request, response) => {
   const { characterName } = request.body;
   // Implementation for adding a character to a room
 });
+
+export default router;

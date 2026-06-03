@@ -19,3 +19,5 @@ router.post('/auth/login', async (request, response) => {
 router.post('/auth/logout', async (request, response) => {
   // Implementation for user logout
 });
+
+export default router;
