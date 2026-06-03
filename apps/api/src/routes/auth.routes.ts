@@ -8,14 +8,9 @@ const router = Router();
 router.post('/register', authController.register);
 
 // User Login
-router.post('/login', async (request, response) => {
-  const { email, password } = request.body;
-  // Implementation for user login
-});
+router.post('/login', authController.login);
 
 // User Logout
-router.post('/logout', async (request, response) => {
-  // Implementation for user logout
-});
+router.post('/logout', authenticate, authController.logout);
 
 export default router;
