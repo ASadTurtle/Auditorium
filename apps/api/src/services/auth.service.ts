@@ -14,7 +14,6 @@ export async function register(username: string, password: string) {
     data: {
       tokenHash: hashSync(token, 10),
       authUserId: user.id,
-      createdAt: new Date(Date.now()),
       expiresAt: new Date((Date.now() + 7 * 24 * 60 * 60 * 1000)), // 7 days
     }
   });
@@ -37,7 +36,6 @@ export async function login(username: string, password: string) {
     data: {
       tokenHash: hashSync(token, 10),
       authUserId: user.id,
-      createdAt: new Date(Date.now()),
       expiresAt: new Date((Date.now() + 7 * 24 * 60 * 60 * 1000)), // 7 days
     }
   });
