@@ -13,9 +13,9 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio",
+    "db:generate": "dotenv -e ../../.env -- prisma generate",
+    "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "db:studio": "dotenv -e ../../.env -- prisma studio",
     "lint": "eslint src --ext ts",
     "typecheck": "tsc --noEmit"
   },
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.15",
+    "dotenv-cli": "^11.0.0",
     "prisma": "^5.18.0"
   }
 }
