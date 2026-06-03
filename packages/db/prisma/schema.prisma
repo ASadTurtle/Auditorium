@@ -70,7 +70,6 @@ model Message {
 
 model Player {
   id     String     @id @default(cuid())
-  name   String
   userId String
   roomId String
   role   PlayerRole @default(PLAYER)
@@ -79,7 +78,6 @@ model Player {
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roomId]) // Ensure a user cannot join the same room multiple times
-  @@unique([roomId, name]) // Ensure player names are unique within a room
   @@index([roomId]) // Optimize queries for players in a room
   @@index([userId]) // Optimize queries for rooms a user has joined
 }
