@@ -2,14 +2,15 @@ import { MessageCircle, Users } from 'lucide-react';
 import { useSessionStore } from '../store/session-store';
 import { Button } from '@/components/ui/button';
 import GeneratePage from '@/components/layout/generatePage';
+import { CreateRoom } from './createRoom';
 
 export default function Dashboard() {
   const { sessionName, connectedPlayers } = useSessionStore();
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <GeneratePage title={'Auditorium'}>
-        <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-8 px-6 py-12">
+      <GeneratePage title='Auditorium'>
+        <section className="mx-auto flex w-full max-w-5xl flex-col justify-center gap-8 px-6 py-12">
           <div className="space-y-3">
             <h1 className="max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
               Immersive TTRPG chat sessions for players and GameMasters.
@@ -32,6 +33,9 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className='flex-row -mx-2 px-2 overflow-hidden'>
+                <div className='py-1'>
+                  <CreateRoom/>
+                </div>
                 <div className='py-1'>
                   <Button className='w-full py-5'>
                     Start a room
