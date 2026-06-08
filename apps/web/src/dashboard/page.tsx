@@ -1,16 +1,45 @@
 import { MessageCircle, Users } from 'lucide-react';
 import { useSessionStore } from '../store/session-store';
+import { useNavigate } from 'react-router';
 
 export default function Dashboard() {
   const { sessionName, connectedPlayers } = useSessionStore();
+  const navigate = useNavigate();
+  const BACKEND_PORT = Number(import.meta.env.VITE_API_PORT ?? 4000);
+
+  function Logout() {
+    fetch('http://localhost:' + BACKEND_PORT + '/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          return Promise.reject(data.error)
+        } else {
+          return Promise.resolve(data.token)
+        }
+    });
+    localStorage.clear();
+    navigate('/login')
+  }
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-8 px-6 py-12">
         <div className="space-y-3">
-          <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            Auditorium
-          </p>
+          <div className='grid sm:grid-cols-2'>
+            <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              Auditorium
+            </p>
+            <button className='bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold w-1/4 py-1 px-2 justify-self-end border border-gray-500 rounded shadow'
+              onClick={Logout}
+            >
+              Logout
+            </button>
+          </div>
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
             Immersive TTRPG chat sessions for players and GameMasters.
           </h1>
