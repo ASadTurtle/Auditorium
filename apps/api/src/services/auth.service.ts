@@ -18,7 +18,7 @@ export async function register(username: string, password: string) {
     }
   });
 
-  return { token }
+  return token
 }
 
 export async function login(username: string, password: string) {
@@ -40,7 +40,7 @@ export async function login(username: string, password: string) {
     }
   });
 
-  return { token }
+  return token
 }
 
 export async function logout(token: string) {
