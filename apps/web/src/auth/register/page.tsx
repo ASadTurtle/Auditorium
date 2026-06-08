@@ -2,6 +2,10 @@ import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 const FormSchema = z.
   object({
@@ -53,7 +57,6 @@ export default function Register() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     fetchToken({username: data.username, password: data.password})
       .then((token) => {
-        console.log(token)
         localStorage.setItem('Token', token);
         navigate('/dashboard');
       });
@@ -61,40 +64,72 @@ export default function Register() {
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-      <div className='w-full max-w-md grid-cols-1'>
-        <div>
-          <h1>Register</h1>
-          <p>Let's get your started</p>
-        </div>
-        <div>
-          <form 
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='w-2/3 space-y-5'
-          >
-            <input
-            type="text"
-            {...form.register('username')}
-            />
-            <input
-            type="text"
-            {...form.register('password')}
-            />
-            <input
-            type="text"
-            {...form.register('passwordCheck')}
-            />
-            <button type='submit'>Register</button>
-            <button
+      <Card aria-label='Register-Card' className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-xl">Register</CardTitle>
+          <CardDescription>Welcome to Auditorium</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-2/3 space-y-5"
+            >
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input {...field} ref={null} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} ref={null} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="passwordCheck"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password Confirmation</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} ref={null} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center gap-1">
+                <Button type="submit">Submit</Button>
+                <Button
+                  variant="ghost"
                   onClick={(event) => {
                     event.preventDefault();
                     navigate('/login');
                   }}
                 >
                   Already a member?
-            </button>
-          </form>
-        </div>
-      </div>
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

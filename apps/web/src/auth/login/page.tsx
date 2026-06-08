@@ -2,6 +2,10 @@ import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 
 const FormSchema = z.
   object({
@@ -47,7 +51,6 @@ export default function Login() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     fetchToken({username: data.username, password: data.password})
       .then((token) => {
-        console.log(token)
         localStorage.setItem('Token', token);
         navigate('/dashboard');
       });
@@ -55,36 +58,64 @@ export default function Login() {
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-      <div className='w-full max-w-md grid-cols-1'>
-        <div>
-          <h1>Log In</h1>
-          <p>Welcome to Auditorium</p>
-        </div>
-        <div>
-          <form 
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='w-2/3 space-y-5'
-          >
-            <input
-            type="text"
-            {...form.register('username')}
-            />
-            <input
-            type="text"
-            {...form.register('password')}
-            />
-            <button type='submit'>Login</button>
-            <button
+      <Card aria-label='Login-Card' className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-xl">Login</CardTitle>
+          <CardDescription>Welcome back to Auditorium</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form 
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='w-2/3 space-y-5'
+            >
+              <FormField 
+                control={form.control}
+                name='username'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field}
+                        ref={null}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField 
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type='password'
+                        {...field}
+                        ref={null}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center gap-1">
+                <Button type="submit">Submit</Button>
+                <Button
+                  variant="ghost"
                   onClick={(event) => {
                     event.preventDefault();
                     navigate('/register');
                   }}
                 >
                   Not a member yet?
-            </button>
-          </form>
-        </div>
-      </div>
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
