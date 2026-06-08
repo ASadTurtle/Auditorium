@@ -84,6 +84,14 @@ export default function Register() {
             {...form.register('passwordCheck')}
             />
             <button type='submit'>Register</button>
+            <button
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate('/login');
+                  }}
+                >
+                  Already a member?
+            </button>
           </form>
         </div>
       </div>
