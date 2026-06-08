@@ -27,6 +27,22 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@utility fade-in {
+  --tw-enter-opacity: 0;
+}
+
+@utility fade-out {
+  --tw-exit-opacity: 0;
+}
+
+@utility zoom-in {
+  --tw-enter-scale: 0.95;
+}
+
+@utility zoom-out {
+  --tw-exit-scale: 0.95;
+}
+
 @layer base {
   :root {
     --background: oklch(1 0 0);
