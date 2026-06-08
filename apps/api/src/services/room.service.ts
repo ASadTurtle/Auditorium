@@ -1,0 +1,81 @@
+import { prisma } from '@auditorium/db';
+import { roomManager } from '../runtime/RoomManager.js';
+
+export async function createRoom(authUserId: string, roomName: string) {
+  const roomWithSameName = await prisma.room.findFirst({ where: { roomName: roomName } });
+  if (roomWithSameName) {
+    throw new Error('ROOM_ALREADY_EXISTS');
+  }
+
+  const newRoom = await prisma.room.create({
+    data: {
+      roomName: roomName,
+      ownerId: authUserId,
+    }
+  });
+
+  await prisma.player.create({
+    data: {
+      userId: authUserId,
+      roomId: newRoom.id,
+      role: "GAMEMASTER",
+    }
+  });
+
+  return newRoom.id;
+}
+
+export async function deleteRoom(_roomId: string) {
+  // Implementation for deleting a room
+}
+
+export async function listRooms(authUserId: string, filter: { member?: string; owner?: string }) {
+  const conditions = [];
+
+  // If the filter value is "self", replace it with the authenticated user's ID
+  const memberId = filter.member === "self" ? authUserId : filter.member;
+  const ownerId = filter.owner === "self" ? authUserId : filter.owner;
+  
+  if (filter.member) {
+    conditions.push({ players: { some: { userId: memberId } } });
+  }
+  
+  if (filter.owner) {
+    conditions.push({ ownerId: ownerId });
+  }
+  
+  return await prisma.room.findMany({
+    where: conditions.length > 0 ? { AND: conditions } : {}
+  });
+}
+
+export async function getRoomDetails(_roomId: string) {
+  // Implementation for getting details of a specific room
+}
+
+export async function joinRoom(authUserId: string, inviteCode: string) {
+  const roomId = roomManager.getActiveRoomByInviteCode(inviteCode);
+  const playerExists = await prisma.player.findFirst({where: {userId: authUserId}});
+  if (playerExists) {
+    throw new Error('PLAYER_ALREADY_MEMBER');
+  }
+
+  await prisma.player.create({
+    data: {
+      userId: authUserId,
+      roomId: roomId
+    }
+  });
+}
+
+export async function getRoomMessages(_roomId: string) {
+  // Implementation for getting messages in a room
+}
+
+export async function deleteCharacterFromRoom(_roomId: string, _characterId: string) {
+  // Implementation for deleting a character from a room
+}
+
+export async function addCharacterToRoom(_roomId: string, _characterName: string) {
+  // Implementation for adding a character to a room
+}

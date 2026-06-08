@@ -8,46 +8,81 @@ datasource db {
 }
 
 model User {
-  id        String               @id @default(cuid())
-  name      String
-  role      UserRole             @default(PLAYER)
-  sessions  SessionParticipant[]
-  messages  Message[]
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  id           String    @id @default(cuid())
+  userName     String    @unique
+  passwordHash String
+  roomsCreated Room[]
+  sessions     Session[]
+  messages     Message[]
+  players      Player[]
 }
 
 model Session {
-  id           String               @id @default(cuid())
-  name         String
-  participants SessionParticipant[]
-  messages     Message[]
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  authUserId String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+
+  authUser User @relation(fields: [authUserId], references: [id], onDelete: Cascade)
 }
 
-model SessionParticipant {
-  id        String   @id @default(cuid())
-  userId    String
-  sessionId String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  joinedAt  DateTime @default(now())
+model Room {
+  id           String      @id @default(cuid())
+  roomName     String
+  ownerId      String
+  createdAt    DateTime    @default(now())
+  lastActiveAt DateTime    @updatedAt
+  characters   Character[]
+  messages     Message[]
+  players      Player[]
 
-  @@unique([userId, sessionId])
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model Character {
+  id       String    @id @default(cuid())
+  name     String
+  isNPC    Boolean   @default(false)
+  roomId   String
+  messages Message[]
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([name, roomId]) // Ensure character names are unique within a room
+  @@index([roomId]) // Optimize queries for characters in a room
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  content   String
-  userId    String
-  sessionId String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String?
+  characterId String?
+  roomId      String
+  createdAt   DateTime @default(now())
+
+  sender    User?      @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  character Character? @relation(fields: [characterId], references: [id], onDelete: SetNull)
+  room      Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt]) // Optimize queries for messages in a room ordered by creation time
 }
 
-enum UserRole {
+model Player {
+  id     String     @id @default(cuid())
+  userId String
+  roomId String
+  role   PlayerRole @default(PLAYER)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roomId]) // Ensure a user cannot join the same room multiple times
+  @@index([roomId]) // Optimize queries for players in a room
+  @@index([userId]) // Optimize queries for rooms a user has joined
+}
+
+enum PlayerRole {
   PLAYER
   GAMEMASTER
 }
