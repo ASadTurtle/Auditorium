@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export function Logout() {
@@ -25,7 +26,8 @@ export function Logout() {
   }
 
   return (
-    <Button aria-label="Dashboard-logout" className="h-full justify-self-end" onClick={runLogout}>
+    <Button aria-label="Dashboard-logout" size="lg" className="justify-self-end" onClick={runLogout}>
+      <LogOut />
       Logout
     </Button>
   )
