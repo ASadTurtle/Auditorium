@@ -11,6 +11,7 @@ export function Logout() {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       }
     })
       .then((res) => res.json())

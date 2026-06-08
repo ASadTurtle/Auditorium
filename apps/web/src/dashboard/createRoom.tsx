@@ -6,6 +6,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { createRoom, CreateRoomRequest } from "@/api/Rooms/createRoom";
 
 const FormSchema = z.object({
   name: z.string().nonempty({
@@ -13,8 +14,12 @@ const FormSchema = z.object({
   })
 });
 
-async function onSubmit() {
-  // Implementation for onSubmit
+async function onSubmit(data: CreateRoomRequest) {
+  try {
+    createRoom(data);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export function CreateRoom() {
@@ -42,8 +47,8 @@ export function CreateRoom() {
         </DialogHeader>
         <Form {...form}>
           <form 
-            className="w-2/3 space-y-5"
             onSubmit={form.handleSubmit(onSubmit)}
+            className="w-2/3 space-y-5"
           >
             <FormField
                 control={form.control}

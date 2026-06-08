@@ -43,7 +43,7 @@ export async function login(username: string, password: string) {
   const token = `${user.id}-${Date.now()}`;
   await prisma.session.create({
     data: {
-      tokenHash: hashSync(token, 10),
+      tokenHash: hashToken(token),
       authUserId: user.id,
       expiresAt: new Date((Date.now() + 7 * 24 * 60 * 60 * 1000)), // 7 days
     }
