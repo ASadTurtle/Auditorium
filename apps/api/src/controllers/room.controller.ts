@@ -46,7 +46,21 @@ export async function getRoomDetails(request: Request, response: Response) {
 
 export async function joinRoom(request: Request, response: Response) {
   const { inviteCode } = request.body;
-  // Implementation for joining a room
+
+  if (!(inviteCode as string).match(`[A-Z0-9]{6}`)) {
+    return response.status(400).json({ error: "Invalid invite code"});
+  }
+    
+  try {
+    roomService.joinRoom(request.user!.id, inviteCode);
+    response.status(200);
+  } catch (error) {
+    if (error instanceof Error && error.message === 'PLAYER_ALREADY_MEMBER') {
+      response.status(400).json({ error: 'This user is already a member of this room' });
+    } else {
+      response.status(500).json({ error: 'An error occurred while joining the room' });
+    }
+  }
 }
 
 export async function getRoomMessages(request: Request, response: Response) {

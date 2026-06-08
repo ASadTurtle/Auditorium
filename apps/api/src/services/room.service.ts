@@ -1,4 +1,5 @@
 import { prisma } from '@auditorium/db';
+import { roomManager } from '../runtime/RoomManager.js';
 
 export async function createRoom(authUserId: string, roomName: string) {
   const roomWithSameName = await prisma.room.findFirst({ where: { roomName: roomName } });
@@ -53,7 +54,22 @@ export async function getRoomDetails(roomId: string) {
 }
 
 export async function joinRoom(authUserId: string, inviteCode: string) {
-  // Implementation for joining a room
+  try {
+    const roomId = roomManager.getActiveRoomByInviteCode(inviteCode);
+    const playerExists = await prisma.player.findFirst({where: {userId: authUserId}});
+    if (playerExists) {
+      throw new Error('PLAYER_ALREADY_MEMBER');
+    }
+
+    await prisma.player.create({
+      data: {
+        userId: authUserId,
+        roomId: roomId
+      }
+    });
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getRoomMessages(roomId: string) {

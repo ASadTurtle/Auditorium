@@ -18,7 +18,7 @@ export class RoomManager {
   private activeRooms = new Map<string, ActiveRoom>();
 
   // Generate a random 6-character invite code for a new room.
-  generateInviteCode(): string {
+  private generateInviteCode(): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let inviteCode = '';
     for (let i = 0; i < 6; i++) {
@@ -35,6 +35,19 @@ export class RoomManager {
     }
 
     return activeRoom;
+  }
+
+  // Find a room by its Invite Code.
+  getActiveRoomByInviteCode(inviteCode: string) {
+    const activeRoom = [...this.activeRooms.entries()].filter(([roomId, room]) => {
+      room.inviteCode === inviteCode
+    }).at(0)?.[1];
+
+    if (!activeRoom) {
+      throw new Error(`Invite code ${inviteCode} was invalid.`)
+    }
+
+    return activeRoom.roomId;
   }
 
   // Open a room by adding a new active room to the room manager. Automatically
@@ -224,3 +237,6 @@ export class RoomManager {
     return activeRoom.messages.slice(activePlayer.lastReceivedMessage);
   }
 }
+
+// Provide RoomManager as a singleton to the server.
+export const roomManager = new RoomManager();

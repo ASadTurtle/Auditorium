@@ -20,10 +20,7 @@ router.get('/:roomId', authenticate, async (request, response) => {
 });
 
 // Become a player in a room using an invite code
-router.post('/join', authenticate, async (request, response) => {
-  const { inviteCode } = request.body;
-  // Implementation for joining a room
-});
+router.post('/join', authenticate, roomController.joinRoom);
 
 // Get all messages in a room
 router.get('/:roomId/messages', authenticate, async (request, response) => {
