@@ -14,8 +14,8 @@ router.delete('/:roomId', authenticate, roomController.deleteRoom);
 router.get('/', authenticate, roomController.listRooms);
 
 // Get details of a specific room
-router.get('/:roomId', authenticate, async (request, response) => {
-  const { roomId } = request.params;
+router.get('/:roomId', authenticate, async (_request, _response) => {
+  const { _roomId } = _request.params;
   // Implementation for getting details of a specific room
 });
 
@@ -23,21 +23,21 @@ router.get('/:roomId', authenticate, async (request, response) => {
 router.post('/join', authenticate, roomController.joinRoom);
 
 // Get all messages in a room
-router.get('/:roomId/messages', authenticate, async (request, response) => {
-  const { roomId } = request.params;
+router.get('/:roomId/messages', authenticate, async (_request, _response) => {
+  const { _roomId } = _request.params;
   // Implementation for getting messages in a room
 });
 
 // Delete a character from a room
-router.delete('/:roomId/characters/:characterId', authenticate, async (request, response) => {
-  const { roomId, characterId } = request.params;
+router.delete('/:roomId/characters/:characterId', authenticate, async (_request, _response) => {
+  const { _roomId, _characterId } = _request.params;
   // Implementation for deleting a character from a room
 });
 
 // Create a character and add them to a room
-router.post('/:roomId/characters', authenticate, async (request, response) => {
-  const { roomId } = request.params;
-  const { characterName } = request.body;
+router.post('/:roomId/characters', authenticate, async (_request, _response) => {
+  const { _roomId } = _request.params;
+  const { _characterName } = _request.body;
   // Implementation for adding a character to a room
 });
 

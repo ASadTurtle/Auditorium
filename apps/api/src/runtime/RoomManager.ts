@@ -39,7 +39,7 @@ export class RoomManager {
 
   // Find a room by its Invite Code.
   getActiveRoomByInviteCode(inviteCode: string) {
-    const activeRoom = [...this.activeRooms.entries()].filter(([roomId, room]) => {
+    const activeRoom = [...this.activeRooms.entries()].filter(([_, room]) => {
       room.inviteCode === inviteCode
     }).at(0)?.[1];
 

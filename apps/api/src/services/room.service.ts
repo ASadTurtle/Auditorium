@@ -14,7 +14,7 @@ export async function createRoom(authUserId: string, roomName: string) {
     }
   });
 
-  const ownerPlayer = await prisma.player.create({
+  await prisma.player.create({
     data: {
       userId: authUserId,
       roomId: newRoom.id,
@@ -25,12 +25,12 @@ export async function createRoom(authUserId: string, roomName: string) {
   return newRoom.id;
 }
 
-export async function deleteRoom(roomId: string) {
+export async function deleteRoom(_roomId: string) {
   // Implementation for deleting a room
 }
 
 export async function listRooms(authUserId: string, filter: { member?: string; owner?: string }) {
-  const conditions: any[] = [];
+  const conditions = [];
 
   // If the filter value is "self", replace it with the authenticated user's ID
   const memberId = filter.member === "self" ? authUserId : filter.member;
@@ -49,37 +49,33 @@ export async function listRooms(authUserId: string, filter: { member?: string; o
   });
 }
 
-export async function getRoomDetails(roomId: string) {
+export async function getRoomDetails(_roomId: string) {
   // Implementation for getting details of a specific room
 }
 
 export async function joinRoom(authUserId: string, inviteCode: string) {
-  try {
-    const roomId = roomManager.getActiveRoomByInviteCode(inviteCode);
-    const playerExists = await prisma.player.findFirst({where: {userId: authUserId}});
-    if (playerExists) {
-      throw new Error('PLAYER_ALREADY_MEMBER');
-    }
-
-    await prisma.player.create({
-      data: {
-        userId: authUserId,
-        roomId: roomId
-      }
-    });
-  } catch (error) {
-    throw error;
+  const roomId = roomManager.getActiveRoomByInviteCode(inviteCode);
+  const playerExists = await prisma.player.findFirst({where: {userId: authUserId}});
+  if (playerExists) {
+    throw new Error('PLAYER_ALREADY_MEMBER');
   }
+
+  await prisma.player.create({
+    data: {
+      userId: authUserId,
+      roomId: roomId
+    }
+  });
 }
 
-export async function getRoomMessages(roomId: string) {
+export async function getRoomMessages(_roomId: string) {
   // Implementation for getting messages in a room
 }
 
-export async function deleteCharacterFromRoom(roomId: string, characterId: string) {
+export async function deleteCharacterFromRoom(_roomId: string, _characterId: string) {
   // Implementation for deleting a character from a room
 }
 
-export async function addCharacterToRoom(roomId: string, characterName: string) {
+export async function addCharacterToRoom(_roomId: string, _characterName: string) {
   // Implementation for adding a character to a room
 }

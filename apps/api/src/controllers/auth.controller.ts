@@ -15,8 +15,10 @@ export async function register(req: Request, res: Response) {
   try {
     const token = await authService.register(username, password);
     return res.status(201).json({ token });
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(400).json({ error: error.message });
+    }
   }
 }
 
@@ -30,8 +32,10 @@ export async function login(req: Request, res: Response) {
   try {
     const token = await authService.login(username, password);
     return res.status(200).json({ token });
-  } catch (error: any) {
-    return res.status(401).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(401).json({ error: error.message });
+    }
   }
 }
 

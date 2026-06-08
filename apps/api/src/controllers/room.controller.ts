@@ -20,8 +20,8 @@ export async function createRoom(request: Request, response: Response) {
   }
 }
 
-export async function deleteRoom(request: Request, response: Response) {
-  const { roomId } = request.params;
+export async function deleteRoom(_request: Request, _response: Response) {
+  const { _roomId } = _request.params;
   // Implementation for deleting a room
 }
 
@@ -39,8 +39,8 @@ export async function listRooms(request: Request, response: Response) {
   }
 }
 
-export async function getRoomDetails(request: Request, response: Response) {
-  const { roomId } = request.params;
+export async function getRoomDetails(_request: Request, _response: Response) {
+  const { _roomId } = _request.params;
   // Implementation for getting details of a specific room
 }
 
@@ -63,18 +63,18 @@ export async function joinRoom(request: Request, response: Response) {
   }
 }
 
-export async function getRoomMessages(request: Request, response: Response) {
-  const { roomId } = request.params;
+export async function getRoomMessages(_request: Request, _response: Response) {
+  const { _roomId } = _request.params;
   // Implementation for getting messages in a room
 }
 
-export async function deleteCharacterFromRoom(request: Request, response: Response) {
-  const { roomId, characterId } = request.params;
+export async function deleteCharacterFromRoom(_request: Request, _response: Response) {
+  const { _roomId, _characterId } = _request.params;
   // Implementation for deleting a character from a room
 }
 
-export async function addCharacterToRoom(request: Request, response: Response) {
-  const { roomId } = request.params;
-  const { characterName } = request.body;
+export async function addCharacterToRoom(_request: Request, _response: Response) {
+  const { _roomId } = _request.params;
+  const { _characterName } = _request.body;
   // Implementation for adding a character to a room
 }
