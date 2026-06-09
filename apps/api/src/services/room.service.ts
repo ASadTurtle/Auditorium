@@ -64,8 +64,8 @@ export async function getRoomDetails(roomId: string) {
   return {
     roomId: room.id,
     name: room.roomName,
-    characters: room.characters.map(({roomId, ...rest}) => rest),
-    players: room.players.map(({roomId, ...rest}) => rest)
+    characters: room.characters.map(({roomId: _, ...rest}) => rest),
+    players: room.players.map(({roomId: _, ...rest}) => rest)
   }
 }
 
