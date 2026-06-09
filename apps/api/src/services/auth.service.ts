@@ -1,6 +1,6 @@
 import { prisma } from '@auditorium/db';
-import { hashSync, compareSync, compare} from 'bcrypt-ts';
-import { createHash, randomBytes } from 'node:crypto';
+import { hashSync, compareSync } from 'bcrypt-ts';
+import { createHash } from 'node:crypto';
 
 function hashToken(token: string) {
   return createHash('sha256').update(token).digest('hex');
