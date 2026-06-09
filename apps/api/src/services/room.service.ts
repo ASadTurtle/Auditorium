@@ -49,8 +49,24 @@ export async function listRooms(authUserId: string, filter: { member?: string; o
   });
 }
 
-export async function getRoomDetails(_roomId: string) {
-  // Implementation for getting details of a specific room
+export async function getRoomDetails(roomId: string) {
+  const room = await prisma.room.findUnique({ where: { id: roomId },
+    include: {
+      characters: true,
+      players: true,
+    }
+  });
+
+  if (!room) {
+    throw new Error('ROOM_NOT_FOUND');
+  }
+
+  return {
+    roomId: room.id,
+    name: room.roomName,
+    characters: room.characters.map(({roomId, ...rest}) => rest),
+    players: room.players.map(({roomId, ...rest}) => rest)
+  }
 }
 
 export async function joinRoom(authUserId: string, inviteCode: string) {
