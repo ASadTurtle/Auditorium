@@ -14,10 +14,7 @@ router.delete('/:roomId', authenticate, roomController.deleteRoom);
 router.get('/', authenticate, roomController.listRooms);
 
 // Get details of a specific room
-router.get('/:roomId', authenticate, async (_request, _response) => {
-  const { _roomId } = _request.params;
-  // Implementation for getting details of a specific room
-});
+router.get('/:roomId', authenticate, roomController.getRoomDetails);
 
 // Become a player in a room using an invite code
 router.post('/join', authenticate, roomController.joinRoom);
