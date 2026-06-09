@@ -39,9 +39,19 @@ export async function listRooms(request: Request, response: Response) {
   }
 }
 
-export async function getRoomDetails(_request: Request, _response: Response) {
-  const { _roomId } = _request.params;
-  // Implementation for getting details of a specific room
+export async function getRoomDetails(request: Request, response: Response) {
+  const { roomId } = request.params;
+  
+  try {
+    const roomDTO = await roomService.getRoomDetails(roomId)
+    response.status(200).json({ roomDTO: roomDTO });
+  } catch (error) {
+    if (error instanceof Error && error.message === 'ROOM_NOT_FOUND') {
+      response.status(404).json({ error: `Could not find room with ID ${roomId}`});
+    } else {
+      response.status(500).json({ error: 'An error occurred while retrieving the room' });
+    }
+  }
 }
 
 export async function joinRoom(request: Request, response: Response) {
