@@ -2,10 +2,6 @@ import { prisma } from '@auditorium/db';
 import { hashSync, compareSync, compare} from 'bcrypt-ts';
 import { createHash, randomBytes } from 'node:crypto';
 
-function createToken() {
-  return randomBytes(32).toString('hex');
-}
-
 function hashToken(token: string) {
   return createHash('sha256').update(token).digest('hex');
 }
@@ -21,7 +17,7 @@ export async function register(username: string, password: string) {
   const token = `${user.id}-${Date.now()}`;
   await prisma.session.create({
     data: {
-      tokenHash: hashToken(createToken()),
+      tokenHash: hashToken(token),
       authUserId: user.id,
       expiresAt: new Date((Date.now() + 7 * 24 * 60 * 60 * 1000)), // 7 days
     }
