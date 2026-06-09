@@ -7,7 +7,7 @@ import './index.css';
 import Register from './auth/register/page';
 import Login from './auth/login/page';
 import Dashboard from './dashboard/page';
-import Room from './room/page';
+import Lobby from './lobby/page';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/room/:roomId' element={<Room />}></Route>
+        <Route path='/room/:roomId' element={<Lobby />}></Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
