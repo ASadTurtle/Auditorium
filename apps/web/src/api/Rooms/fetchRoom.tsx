@@ -35,11 +35,6 @@ export async function fetchRoom(data: FetchRoomRequest): Promise<RoomDTO> {
       if (data.error) {
         return Promise.reject(data.error);
       } else {
-        data.roomDTO.players = data.roomDTO.players.map((player: any) => {
-          if (player.role === "GAMEMASTER") {
-            return {...player, role: "GM"} 
-          }
-        })
         return Promise.resolve(data.roomDTO)
       }
     });

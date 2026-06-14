@@ -2,10 +2,6 @@ export type CreateRoomRequest = {
   name: string
 }
 
-type CreateRoomResponse = {
-  roomId: string
-}
-
 const BACKEND_PORT = Number(import.meta.env.VITE_API_PORT ?? 4000);
 
 export async function createRoom(data: CreateRoomRequest) {

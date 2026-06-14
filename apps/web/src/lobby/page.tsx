@@ -1,7 +1,7 @@
 import { fetchRoom, FetchRoomRequest, RoomDTO } from "@/api/Rooms/fetchRoom";
 import GeneratePage from "@/components/layout/generatePage";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollText, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";

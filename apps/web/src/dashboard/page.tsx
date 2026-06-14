@@ -5,7 +5,7 @@ import GeneratePage from '@/components/layout/generatePage';
 import { CreateRoom } from './createRoom';
 
 export default function Dashboard() {
-  const { sessionName, connectedPlayers } = useSessionStore();
+  const { sessionName } = useSessionStore();
 
   return (
     <main className="min-h-screen bg-background text-foreground">
