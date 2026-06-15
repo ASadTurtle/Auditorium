@@ -1,13 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 export function SelectCharacter() {
   const pcs = ["Strahd", "Edward", "Aurelion", "Brumhilde"] // Placeholder
   const npcs = ["Yousef", "Michael", "Dawnstar", "Lint"] // Placeholder
+  const [character, setCharacter] = useState<string>("")
+
+  useEffect(() => {           // For debugging. TODO delete
+    console.log(character);
+  }, [character])
 
   return (
-    <Select>
-      <SelectTrigger className="w-1/6">
+    <Select onValueChange={setCharacter}>
+      <SelectTrigger className="w-full max-w-48">
         <SelectValue placeholder="Select a Character"/>
       </SelectTrigger>
       <SelectContent className="bg-background">
