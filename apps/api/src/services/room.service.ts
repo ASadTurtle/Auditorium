@@ -115,6 +115,29 @@ export async function deleteCharacterFromRoom(_roomId: string, _characterId: str
   // Implementation for deleting a character from a room
 }
 
-export async function addCharacterToRoom(_roomId: string, _characterName: string) {
-  // Implementation for adding a character to a room
+export async function addCharacterToRoom(authUserId:string, roomId: string, characterName: string, isNPC: boolean) {
+  const room = await prisma.room.findUnique({ where: {id: roomId } });
+  const player = await prisma.player.findFirst({ where: { userId: authUserId } })
+  const character = await prisma.character.findUnique({ where: { name_roomId: {name: characterName, roomId: roomId} } })
+
+  if (!room) {
+    throw new Error("ROOM_NOT_FOUND")
+  } 
+  if (!player) {
+    throw new Error("PLAYER_NOT_MEMBER")
+  } 
+  if (player.role !== "GAMEMASTER" && isNPC) {
+    throw new Error("CANNOT_CREATE_NPC")
+  } 
+  if (character) {
+    throw new Error("CHARACTER_ALREADY_EXISTS")
+  }
+  
+  await prisma.character.create({
+    data: {
+      name: characterName,
+      isNPC: isNPC,
+      roomId: roomId
+    }
+  })
 }
