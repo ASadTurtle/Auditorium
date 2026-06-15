@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEffect, useState } from "react";
+import { CreateCharacter } from "./createCharacter";
 
-export function SelectCharacter() {
+type SelectCharacterProps = { roomId: string }
+
+export function SelectCharacter({ roomId }: SelectCharacterProps) {
   const pcs = ["Strahd", "Edward", "Aurelion", "Brumhilde"] // Placeholder
   const npcs = ["Yousef", "Michael", "Dawnstar", "Lint"] // Placeholder
   const [character, setCharacter] = useState<string>("")
@@ -32,7 +35,7 @@ export function SelectCharacter() {
           ))}
         </SelectGroup>
         <hr />
-        <Button variant={"ghost"} className="w-full">Create a Character</Button>
+        <CreateCharacter roomId={roomId}/>
       </SelectContent>
     </Select>
   )

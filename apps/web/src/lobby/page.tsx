@@ -60,7 +60,7 @@ export default function Lobby() {
           <CardContent>
             {roomData.players.map((player) => (
               <div id={player.id} className="flex flex-row justify-self-auto items-center">
-                {player.name} | {player.role} | <SelectCharacter/> | In Lobby
+                {player.name} | {player.role} | <SelectCharacter roomId={roomData.roomId}/> | In Lobby
               </div>
               )
             )}
