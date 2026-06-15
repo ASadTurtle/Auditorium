@@ -5,12 +5,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-type CreateCharacterProps = { roomId: string }
+type CreateCharacterProps = { roomId: string 
+  pcs: string[]
+  setPcs: Dispatch<SetStateAction<string[]>>
+  npcs: string[]
+  setNpcs: Dispatch<SetStateAction<string[]>>
+}
 
-export function CreateCharacter({ roomId }: CreateCharacterProps) {
+export function CreateCharacter({ roomId, pcs, setPcs, npcs, setNpcs }: CreateCharacterProps) {
   const isDM = true;  // Placeholder for when client detects DM status
   
   const FormSchema = z.object({
@@ -32,7 +38,13 @@ export function CreateCharacter({ roomId }: CreateCharacterProps) {
     async function onSubmit(req: CharacterFormValues) {
         try {
           const characterId = await createCharacter({roomId, ...req});
-          console.log(characterId)
+          if (req.isNPC) {
+            npcs.push(req.name)
+            setNpcs(npcs)
+          } else {
+            pcs.push(req.name)
+            setPcs(pcs)
+          }
         } catch (error) {
           console.error(error)
         }

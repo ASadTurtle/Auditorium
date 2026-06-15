@@ -92,8 +92,8 @@ export async function addCharacterToRoom(request: Request, response: Response) {
   }
 
   try {
-    await roomService.addCharacterToRoom(request.user!.id, roomId, characterName, isNPC)
-    response.status(201).end();
+    const characterId = await roomService.addCharacterToRoom(request.user!.id, roomId, characterName, isNPC)
+    response.status(201).json({ id: characterId });
   } catch (error) {
     if (error instanceof Error && error.message === "ROOM_NOT_FOUND") {
       response.status(404).json({ error: `Could not find room with ID ${roomId}` });

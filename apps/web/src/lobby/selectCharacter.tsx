@@ -1,18 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { CreateCharacter } from "./createCharacter";
 
 type SelectCharacterProps = { roomId: string }
 
 export function SelectCharacter({ roomId }: SelectCharacterProps) {
-  const pcs = ["Strahd", "Edward", "Aurelion", "Brumhilde"] // Placeholder
-  const npcs = ["Yousef", "Michael", "Dawnstar", "Lint"] // Placeholder
   const [character, setCharacter] = useState<string>("")
+  const [pcs, setPcs] = useState<string[]>(["Strahd", "Edward", "Aurelion", "Brumhilde"])
+  const [npcs, setNpcs] = useState<string[]>(["Yousef", "Michael", "Dawnstar", "Lint"]);
 
   useEffect(() => {           // For debugging. TODO delete
     console.log(character);
-  }, [character])
+  }, [])
 
   return (
     <Select onValueChange={setCharacter}>
@@ -27,7 +27,7 @@ export function SelectCharacter({ roomId }: SelectCharacterProps) {
             <SelectItem disabled={name==="Aurelion"}value={name}>{name}</SelectItem>
           ))}
         </SelectGroup>
-        <SelectGroup hidden> {/* Should be hidden if player is not GM*/}
+        <SelectGroup> {/* Should be hidden if player is not GM*/}
           <SelectSeparator/>
           <SelectLabel>NPCs</SelectLabel>
           {npcs.map((name) => (
@@ -35,7 +35,7 @@ export function SelectCharacter({ roomId }: SelectCharacterProps) {
           ))}
         </SelectGroup>
         <hr />
-        <CreateCharacter roomId={roomId}/>
+        <CreateCharacter roomId={roomId} pcs={pcs} setNpcs={setNpcs} setPcs={setPcs} npcs={npcs}/>
       </SelectContent>
     </Select>
   )
