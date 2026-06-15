@@ -32,10 +32,6 @@ router.delete('/:roomId/characters/:characterId', authenticate, async (_request,
 });
 
 // Create a character and add them to a room
-router.post('/:roomId/characters', authenticate, async (_request, _response) => {
-  const { _roomId } = _request.params;
-  const { _characterName } = _request.body;
-  // Implementation for adding a character to a room
-});
+router.post('/:roomId/characters', authenticate, roomController.addCharacterToRoom);
 
 export default router;
