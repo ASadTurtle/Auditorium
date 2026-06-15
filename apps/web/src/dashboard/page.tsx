@@ -5,7 +5,7 @@ import GeneratePage from '@/components/layout/generatePage';
 import { CreateRoom } from './createRoom';
 
 export default function Dashboard() {
-  const { sessionName, connectedPlayers } = useSessionStore();
+  const { sessionName } = useSessionStore();
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -54,12 +54,12 @@ export default function Dashboard() {
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-secondary text-secondary-foreground">
                   <Users className="h-5 w-5" aria-hidden="true" />
                 </div>
-                <h2 className="text-lg font-semibold">{connectedPlayers} connected players</h2>
+                <h2 className="text-lg font-semibold">12,337 regstered players</h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   Socket events can update this once the real session gateway lands.
                 </p>
               </div>
-              <div className='flex-row -mx-2 px-2 overflow-hidden'>
+              <div className='flex-row -mx-2 px-2 overflow-hidden self-center'>
                 <div className='py-1'>
                   <Button className='w-full py-5'>
                     My Rooms

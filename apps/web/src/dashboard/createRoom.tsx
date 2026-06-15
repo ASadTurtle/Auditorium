@@ -7,29 +7,34 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { createRoom, CreateRoomRequest } from "@/api/Rooms/createRoom";
+import { useNavigate } from "react-router";
 
-const FormSchema = z.object({
-  name: z.string().nonempty({
-    message: 'Please provide a name',
-  })
-});
-
-async function onSubmit(data: CreateRoomRequest) {
-  try {
-    createRoom(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 export function CreateRoom() {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  
+  const FormSchema = z.object({
+    name: z.string().nonempty({
+      message: 'Please provide a name',
+    })
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
     },
   });
+  
+  async function onSubmit(req: CreateRoomRequest) {
+    try {
+      const roomId = await createRoom(req);
+      navigate(`/room/${roomId}`);
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

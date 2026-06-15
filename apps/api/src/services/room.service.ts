@@ -52,8 +52,25 @@ export async function listRooms(authUserId: string, filter: { member?: string; o
 export async function getRoomDetails(roomId: string) {
   const room = await prisma.room.findUnique({ where: { id: roomId },
     include: {
-      characters: true,
-      players: true,
+      characters: {
+        select: {
+          id: true,
+          name: true,
+          isNPC: true,
+        }
+      },
+      players: {
+        select: {
+          id: true,
+          userId: true,
+          role: true,
+          user: {
+            select: {
+              userName: true
+            }
+          }
+        }
+      },
     }
   });
 
@@ -63,9 +80,15 @@ export async function getRoomDetails(roomId: string) {
 
   return {
     roomId: room.id,
+    owner: room.ownerId,
     name: room.roomName,
-    characters: room.characters.map(({roomId: _, ...rest}) => rest),
-    players: room.players.map(({roomId: _, ...rest}) => rest)
+    characters: room.characters,
+    players: room.players.map(
+      ({user, ...rest}) => ({
+        ...rest,
+        name: user.userName
+      })
+    )
   }
 }
 
