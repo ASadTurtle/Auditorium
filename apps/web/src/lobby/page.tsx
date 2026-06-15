@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollText, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { SelectCharacter } from "./selectCharacter";
 
 export default function Lobby() {
   const { roomId } = useParams();
@@ -58,11 +59,11 @@ export default function Lobby() {
           </CardHeader>
           <CardContent>
             {roomData.players.map((player) => (
-              <div id={player.id} className="justify-self-auto">
-                {player.name} | {player.role} | Select a Character | In Lobby
+              <div id={player.id} className="flex flex-row justify-self-auto items-center">
+                {player.name} | {player.role} | <SelectCharacter/> | In Lobby
               </div>
-            )
-          )}
+              )
+            )}
             <div id={"12345"} className="justify-self-auto">
                 {"Dummy player"} | {"Player"} | Select a Character | In Lobby
             </div>
