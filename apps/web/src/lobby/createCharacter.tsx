@@ -73,7 +73,7 @@ export function CreateCharacter(props: CreateCharacterProps) {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Henry Baker" ref={null} />
+                    <Input autoComplete="off" {...field} placeholder="Henry Baker" ref={null} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
