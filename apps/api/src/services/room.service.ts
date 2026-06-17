@@ -118,7 +118,7 @@ export async function deleteCharacterFromRoom(_roomId: string, _characterId: str
 export async function addCharacterToRoom(authUserId:string, roomId: string, characterName: string, isNPC: boolean) {
   const room = await prisma.room.findUnique({ where: {id: roomId } });
   const player = await prisma.player.findFirst({ where: { userId: authUserId } })
-  const character = await prisma.character.findUnique({ where: { name_roomId: {name: characterName, roomId: roomId} } })
+  const characterExists = await prisma.character.findUnique({ where: { name_roomId: {name: characterName, roomId: roomId} } })
 
   if (!room) {
     throw new Error("ROOM_NOT_FOUND")
@@ -129,15 +129,17 @@ export async function addCharacterToRoom(authUserId:string, roomId: string, char
   if (player.role !== "GAMEMASTER" && isNPC) {
     throw new Error("CANNOT_CREATE_NPC")
   } 
-  if (character) {
+  if (characterExists) {
     throw new Error("CHARACTER_ALREADY_EXISTS")
   }
   
-  await prisma.character.create({
+  const character = await prisma.character.create({
     data: {
       name: characterName,
       isNPC: isNPC,
       roomId: roomId
     }
   })
+
+  return character.id
 }
