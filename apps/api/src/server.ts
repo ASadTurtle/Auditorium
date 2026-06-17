@@ -29,11 +29,56 @@ app.get('/health', async (_request, response) => {
 });
 
 io.on('connection', (socket) => {
-  socket.emit(`Client ${socket.id}: connected`, { socketId: socket.id });
-});
+  console.log(`Client ${socket.id}: connected`);
 
-io.on('disconnect', (socket) => {
-  socket.emit(`Client ${socket.id}: disconnected`, { socketId: socket.id });
+  socket.on('disconnect', () => {
+    console.log(`Client ${socket.id}: disconnected`)
+  });
+  
+  socket.on("START_LOBBY", (roomId) => {
+    const lobbyAddress = `${roomId}_l`;
+    socket.join(lobbyAddress);
+    console.log(`CLIENT STARTED LOBBY ${roomId}`)
+  })
+  
+  socket.on("JOIN_LOBBY", (roomId) => {
+    const lobbyAddress = `${roomId}_l`;
+    socket.join(lobbyAddress);
+    console.log(`CLIENT JOINED LOBBY ${roomId}`)
+    io.to(lobbyAddress).emit(`CLIENT JOINED LOBBY ${roomId}`)
+  });
+  
+  socket.on("LEAVE_LOBBY", (roomId) => {
+    const lobbyAddress = `${roomId}_l`;
+    socket.leave(lobbyAddress)
+    console.log(`CLIENT LEFT LOBBY ${roomId}`)
+    io.to(lobbyAddress).emit(`CLIENT LEFT LOBBY ${roomId}`)
+  });
+
+  socket.on("JOIN_ROOM", (roomId) => {
+    const roomAddress = `${roomId}_r`;
+    socket.join(roomAddress)
+    console.log(`CLIENT JOINED ROOM ${roomId}`)
+    socket.to(roomAddress).emit(`CLIENT JOINED ROOM ${roomId}`)
+  });
+
+  socket.on("CREATE_CHARACTER", () => {
+    console.log(`CLIENT CREATED NEW CHARACTER`);
+  });
+
+  socket.on("SELECT_CHARACTER", (character) => {
+    console.log(`CHARACTER SELECTED: ${character}`)
+  });
+
+  socket.on("DESELECT_CHARACTER", (character) => {
+    console.log(`CHARACTER DESELECTED ${character}`)
+  });
+
+  socket.on("SEND_MESSAGE", (sender, roomId, message) => {
+    const roomAddress = `${roomId}_r`;
+    socket.to(roomAddress).emit(`${sender}: ${message}`)
+    console.log(`${sender}: ${message}`);
+  })
 });
 
 httpServer.listen(port, () => {

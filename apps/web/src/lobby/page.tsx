@@ -6,6 +6,7 @@ import { ScrollText, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { SelectCharacter } from "./selectCharacter";
+import socket from "@/socket";
 
 export default function Lobby() {
   const { roomId } = useParams();
@@ -29,6 +30,15 @@ export default function Lobby() {
     
     set({ roomId } as FetchRoomRequest);
   }, []);
+  
+  const handleJoin = () => {
+    socket.emit("JOIN_ROOM", roomId);
+  }
+
+  const handleDisconnect = () => {
+    socket.emit("LEAVE_LOBBY", roomId)
+    navigate('/dashboard')
+  }
 
   if (roomData) {
     return (
@@ -54,32 +64,20 @@ export default function Lobby() {
               <div className="flex h-10 w-10 items-center justify-center rounded-md bg-secondary">
                 <Users className="h-5 w-5" aria-hidden="true" />
               </div>
-              <CardTitle>2/{roomData.players.length + 4} Players</CardTitle>
+              <CardTitle>1/{roomData.players.length} Players</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             {roomData.players.map((player) => (
               <div id={player.id} className="flex flex-row justify-self-auto items-center">
-                {player.name} | {player.role} | <SelectCharacter roomId={roomData.roomId}/> | In Lobby
+                {player.name} | {player.role} | <SelectCharacter characters={roomData.characters} roomId={roomData.roomId}/> | In Lobby
               </div>
               )
             )}
-            <div id={"12345"} className="justify-self-auto">
-                {"Dummy player"} | {"Player"} | Select a Character | In Lobby
-            </div>
-            <div id={"12346"} className="justify-self-auto">
-                {"Dummy player 2"} | {"Player"} | Select a Character | Offline
-            </div>
-            <div id={"12347"} className="justify-self-auto">
-                {"Dummy player 3"} | {"GM"} | Select a Character | Offline
-            </div>
-            <div id={"12348"} className="justify-self-auto">
-                {"Dummy player 4"} | {"Player"} | Select a Character | Offline
-            </div>
           </CardContent>
           <div className="flex flex-cols-2 gap-2 px-4 w-full justify-end">
-            <Button size={"lg"}>Join</Button>
-            <Button variant={'destructive'} size={"lg"} onClick={() => navigate('/dashboard') } >
+            <Button size={"lg"} onClick={handleJoin}>Join</Button>
+            <Button variant={'destructive'} size={"lg"} onClick={handleDisconnect} >
               Disconnect
             </Button>
           </div>

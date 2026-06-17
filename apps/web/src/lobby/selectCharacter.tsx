@@ -1,17 +1,44 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateCharacter } from "./createCharacter";
+import socket from "@/socket";
 
-type SelectCharacterProps = { roomId: string }
+type SelectCharacterProps = { 
+  roomId: string
+  characters: {
+    id: string;
+    name: string;
+    isNPC: boolean;
+  }[]
+}
 
-export function SelectCharacter({ roomId }: SelectCharacterProps) {
-  const [_character, setCharacter] = useState<string>("")
+export function SelectCharacter(props: SelectCharacterProps) {
+  const {roomId, characters} = props;
+  const [character, setCharacter] = useState<string>("")
   const [pcs, setPcs] = useState<string[]>([])
   const [npcs, setNpcs] = useState<string[]>([]);
 
+  const handleSetCharacter = (newCharacter: string) => {
+    if (character) {
+      socket.emit("DESELECT_CHARACTER", character);
+    }
+    setCharacter(newCharacter);
+    socket.emit("SELECT_CHARACTER", newCharacter);
+  }
+
+  useEffect(() => {
+    const filterPcs = characters.filter((c) => !c.isNPC)
+      .map((c) => c.name);
+    const filterNpcs = characters.filter((c) => c.isNPC)
+      .map((c) => c.name);
+
+    setPcs(filterPcs)
+    setNpcs(filterNpcs)
+  }, [])
+
   if (pcs.length > 0 || npcs.length > 0) {
     return (
-      <Select onValueChange={setCharacter}>
+      <Select onValueChange={handleSetCharacter}>
         <SelectTrigger className="w-full max-w-48">
           <SelectValue placeholder="Select a Character"/>
         </SelectTrigger>

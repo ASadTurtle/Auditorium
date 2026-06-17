@@ -33,6 +33,7 @@
     "npm": ">=10.0.0"
   },
   "dependencies": {
-    "bcrypt-ts": "^8.0.1"
+    "bcrypt-ts": "^8.0.1",
+    "socket.io": "^4.8.3"
   }
 }

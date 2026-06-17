@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import socket from "@/socket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
@@ -47,6 +48,7 @@ export function CreateCharacter(props: CreateCharacterProps) {
         pcs.push(req.name)
         setPcs([...pcs])
       }
+      socket.emit("CREATE_CHARACTER")
     } catch (error) {
       form.setError("name", {
         type: "validate",

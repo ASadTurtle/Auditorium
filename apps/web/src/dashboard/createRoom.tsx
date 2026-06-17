@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { createRoom, CreateRoomRequest } from "@/api/Rooms/createRoom";
 import { useNavigate } from "react-router";
+import socket from "@/socket";
 
 
 export function CreateRoom() {
@@ -30,6 +31,7 @@ export function CreateRoom() {
   async function onSubmit(req: CreateRoomRequest) {
     try {
       const roomId = await createRoom(req);
+      socket.emit("START_LOBBY", roomId);
       navigate(`/room/${roomId}`);
     } catch (error) {
       console.error(error)

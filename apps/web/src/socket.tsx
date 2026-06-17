@@ -1,0 +1,9 @@
+import { io } from "socket.io-client";
+const URL = "http://localhost:4000";
+const socket = io(URL);
+
+socket.onAny((eventName: any) => {
+  console.log(eventName);
+});
+
+export default socket;
