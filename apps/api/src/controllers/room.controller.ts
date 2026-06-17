@@ -102,7 +102,7 @@ export async function addCharacterToRoom(request: Request, response: Response) {
     } else if (error instanceof Error && error.message === "CANNOT_CREATE_NPC") {
       response.status(403).json({ error: "Only a GM can create an NPC" })
     } else if (error instanceof Error && error.message === "CHARACTER_ALREADY_EXISTS") {
-      response.status(400).json({ error: `${characterName} already exists in this room` })
+      response.status(400).json({ error: `"${characterName}" already exists in this room` })
     } else {
       response.status(500).json({ error: 'An error occurred while joining the room' });
     }

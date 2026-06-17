@@ -9,14 +9,16 @@ import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-type CreateCharacterProps = { roomId: string 
+type CreateCharacterProps = {
+  roomId: string 
   pcs: string[]
   setPcs: Dispatch<SetStateAction<string[]>>
   npcs: string[]
   setNpcs: Dispatch<SetStateAction<string[]>>
 }
 
-export function CreateCharacter({ roomId, pcs, setPcs, npcs, setNpcs }: CreateCharacterProps) {
+export function CreateCharacter(props: CreateCharacterProps) {
+  const { roomId, pcs, setPcs, npcs, setNpcs } = props
   const isDM = true;  // Placeholder for when client detects DM status
   
   const FormSchema = z.object({
@@ -35,63 +37,66 @@ export function CreateCharacter({ roomId, pcs, setPcs, npcs, setNpcs }: CreateCh
     },
   });
 
-    async function onSubmit(req: CharacterFormValues) {
-        try {
-          const characterId = await createCharacter({roomId, ...req});
-          if (req.isNPC) {
-            npcs.push(req.name)
-            setNpcs(npcs)
-          } else {
-            pcs.push(req.name)
-            setPcs(pcs)
-          }
-        } catch (error) {
-          console.error(error)
-        }
+  async function onSubmit(req: CharacterFormValues) {
+    try {
+      await createCharacter({roomId, ...req});
+      if (req.isNPC) {
+        npcs.push(req.name)
+        setNpcs([...npcs])
+      } else {
+        pcs.push(req.name)
+        setPcs([...pcs])
       }
+    } catch (error) {
+      form.setError("name", {
+        type: "validate",
+        message: error as string
+      })
+    }
+  }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="w-full" variant="ghost">Create a Character</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Create your Character</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Henry Baker" ref={null} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="isNPC"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Is NPC</FormLabel>
-                    <FormControl>
-                      <Checkbox 
-                        disabled={!isDM}
-                        checked={field.value}
-                        onCheckedChange={(checked) => field.onChange(checked)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}  
-              />
-              <Button size={'lg'} className="w-1/4" type="submit">Create</Button>
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Henry Baker" ref={null} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isNPC"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Is NPC</FormLabel>
+                  <FormControl>
+                    <Checkbox 
+                      disabled={!isDM}
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}  
+            />
+            <Button size={'lg'} className="w-1/4" type="submit">Create</Button>
           </form>
         </Form>
       </DialogContent>

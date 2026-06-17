@@ -10,10 +10,6 @@ export function SelectCharacter({ roomId }: SelectCharacterProps) {
   const [pcs, setPcs] = useState<string[]>(["Strahd", "Edward", "Aurelion", "Brumhilde"])
   const [npcs, setNpcs] = useState<string[]>(["Yousef", "Michael", "Dawnstar", "Lint"]);
 
-  useEffect(() => {           // For debugging. TODO delete
-    console.log(character);
-  }, [])
-
   return (
     <Select onValueChange={setCharacter}>
       <SelectTrigger className="w-full max-w-48">
