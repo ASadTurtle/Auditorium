@@ -60,7 +60,12 @@ export function CreateCharacter(props: CreateCharacterProps) {
       <DialogTrigger asChild>
         <Button className="w-full" variant="ghost">Create a Character</Button>
       </DialogTrigger>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent 
+        aria-describedby={undefined}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        onPointerMove={(e) => e.stopPropagation()}
+      >
         <DialogHeader>
           <DialogTitle>Create your Character</DialogTitle>
         </DialogHeader>
@@ -70,7 +75,7 @@ export function CreateCharacter(props: CreateCharacterProps) {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="py-2">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input autoComplete="off" {...field} placeholder="Henry Baker" ref={null} />
@@ -83,11 +88,11 @@ export function CreateCharacter(props: CreateCharacterProps) {
               control={form.control}
               name="isNPC"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Is NPC</FormLabel>
+                <FormItem className="flex justify-between py-2">
+                  <FormLabel hidden={!isDM}>Is NPC</FormLabel>
                   <FormControl>
-                    <Checkbox 
-                      disabled={!isDM}
+                    <Checkbox
+                      hidden={!isDM} 
                       checked={field.value}
                       onCheckedChange={(checked) => field.onChange(checked)}
                     />
