@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import { CreateCharacter } from "./createCharacter";
 
 type SelectCharacterProps = { roomId: string }
 
 export function SelectCharacter({ roomId }: SelectCharacterProps) {
-  const [character, setCharacter] = useState<string>("")
+  const [_character, setCharacter] = useState<string>("")
   const [pcs, setPcs] = useState<string[]>(["Strahd", "Edward", "Aurelion", "Brumhilde"])
   const [npcs, setNpcs] = useState<string[]>(["Yousef", "Michael", "Dawnstar", "Lint"]);
 
