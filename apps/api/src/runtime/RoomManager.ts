@@ -52,7 +52,7 @@ export class RoomManager {
 
   // Open a room by adding a new active room to the room manager. Automatically
   // adds the host player to the room as well.
-  async openRoom(hostUserId: string, playerId: string, roomId: string, socketId: string) {
+  async openRoom(hostUserId: string, roomId: string, socketId: string) {
     if (this.activeRooms.has(roomId)) {
       throw new Error(`Room with ID ${roomId} is already active.`);
     }

@@ -3,69 +3,68 @@ import { useEffect, useState } from "react";
 import { CreateCharacter } from "./createCharacter";
 import socket from "@/socket";
 
+export type Character = {
+  id: string;
+  name: string;
+  isNPC: boolean;
+}
+
 type SelectCharacterProps = { 
   roomId: string
-  characters: {
-    id: string;
-    name: string;
-    isNPC: boolean;
-  }[]
+  characters: Character[]
 }
 
 export function SelectCharacter(props: SelectCharacterProps) {
-  const {roomId, characters} = props;
-  const [character, setCharacter] = useState<string>("")
-  const [pcs, setPcs] = useState<string[]>([])
-  const [npcs, setNpcs] = useState<string[]>([]);
+  const {roomId, characters: charactersDTO } = props;
+  const [characters, setCharacters] = useState<Character[]>([])
+  const [character, setCharacter] = useState<Character>()
 
-  const handleSetCharacter = (newCharacter: string) => {
+  const handleSetCharacter = (selectedCharacterId: string) => {
     if (character) {
       socket.emit("DESELECT_CHARACTER", character);
     }
+    const newCharacter = characters.find((c) => c.id === selectedCharacterId)
     setCharacter(newCharacter);
     socket.emit("SELECT_CHARACTER", newCharacter);
   }
 
   useEffect(() => {
-    const filterPcs = characters.filter((c) => !c.isNPC)
-      .map((c) => c.name);
-    const filterNpcs = characters.filter((c) => c.isNPC)
-      .map((c) => c.name);
-
-    setPcs(filterPcs)
-    setNpcs(filterNpcs)
+    setCharacters(charactersDTO);
   }, [])
 
-  if (pcs.length > 0 || npcs.length > 0) {
+  if (characters.length > 0) {
     return (
       <Select onValueChange={handleSetCharacter}>
         <SelectTrigger className="w-full max-w-48">
           <SelectValue placeholder="Select a Character"/>
         </SelectTrigger>
         <SelectContent className="bg-background">
-          <SelectGroup hidden={pcs.length === 0}>
+          <SelectGroup hidden={characters.filter((c) => !c.isNPC).length === 0}>
             <SelectLabel>PCs</SelectLabel>
             {/* Should be disabled if character has been selected*/}
-            {pcs.map((name) => (
-              <SelectItem disabled={name==="Aurelion"}value={name}>{name}</SelectItem>
+            {characters.filter((c) => !c.isNPC)
+              .map((character) => (
+              <SelectItem value={character.id}>{character.name}</SelectItem>
             ))}
           </SelectGroup>
-          <SelectGroup hidden={npcs.length === 0}> {/* Should be hidden if player is not GM*/}
-            <SelectSeparator/>
+            {/* Should be hidden if player is not GM*/}
+          <SelectGroup hidden={characters.filter((c) => c.isNPC).length === 0}>
             <SelectLabel>NPCs</SelectLabel>
-            {npcs.map((name) => (
-              <SelectItem value={name}>{name}</SelectItem>
+            {/* Should be disabled if character has been selected*/}
+            {characters.filter((c) => c.isNPC)
+              .map((character) => (
+              <SelectItem value={character.id}>{character.name}</SelectItem>
             ))}
           </SelectGroup>
           <hr />
-          <CreateCharacter roomId={roomId} pcs={pcs} setNpcs={setNpcs} setPcs={setPcs} npcs={npcs}/>
+          <CreateCharacter roomId={roomId} characters={characters} setCharacters={setCharacters}/>
         </SelectContent>
       </Select>
     )
   } else {
     return (
       <div className="w-36">
-        <CreateCharacter roomId={roomId} pcs={pcs} setNpcs={setNpcs} setPcs={setPcs} npcs={npcs}/>
+        <CreateCharacter roomId={roomId} characters={characters} setCharacters={setCharacters}/>
       </div>
   )
   }

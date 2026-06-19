@@ -9,17 +9,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Character } from "./selectCharacter";
 
 type CreateCharacterProps = {
   roomId: string 
-  pcs: string[]
-  setPcs: Dispatch<SetStateAction<string[]>>
-  npcs: string[]
-  setNpcs: Dispatch<SetStateAction<string[]>>
+  characters: Character[]
+  setCharacters: Dispatch<SetStateAction<Character[]>>
 }
 
 export function CreateCharacter(props: CreateCharacterProps) {
-  const { roomId, pcs, setPcs, npcs, setNpcs } = props
+  const { roomId, characters, setCharacters } = props
   const isDM = true;  // Placeholder for when client detects DM status
   
   const FormSchema = z.object({
@@ -40,15 +39,10 @@ export function CreateCharacter(props: CreateCharacterProps) {
 
   async function onSubmit(req: CharacterFormValues) {
     try {
-      await createCharacter({roomId, ...req});
-      if (req.isNPC) {
-        npcs.push(req.name)
-        setNpcs([...npcs])
-      } else {
-        pcs.push(req.name)
-        setPcs([...pcs])
-      }
-      socket.emit("CREATE_CHARACTER")
+      const id = await createCharacter({roomId, ...req});
+      characters.push({id, name: req.name, isNPC: req.isNPC});
+      setCharacters([...characters]);
+      socket.emit("CREATE_CHARACTER");
     } catch (error) {
       form.setError("name", {
         type: "validate",

@@ -31,7 +31,7 @@ export function CreateRoom() {
   async function onSubmit(req: CreateRoomRequest) {
     try {
       const roomId = await createRoom(req);
-      socket.emit("START_LOBBY", roomId);
+      socket.emit("START_LOBBY", roomId, socket.id);
       navigate(`/room/${roomId}`);
     } catch (error) {
       console.error(error)
